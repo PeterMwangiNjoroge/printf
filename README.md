@@ -1,2 +1,2 @@
 # printf
-Implementaion of custom printf function project.
+Implementation of custom printf function project.
