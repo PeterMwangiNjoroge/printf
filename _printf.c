@@ -9,49 +9,21 @@
 
 int _printf(const char *format, ...)
 {
-	int char_printed = 0;
-	va_list arg_list;
+	int total = 0;
+	va_list list;
 
-	if (format == NULL)
-		return (-1);
-	va_start(arg_list, format);
-	while (*format)
+
+	va_start(list, format);
+	while (*format != '\0')
 	{
-		if (*format != '%')
-		{
-			write(1, format, 1);
-			char_printed++;
-		}
+		if (*format == '%' && *(format + 1) != NULL)
+			total += get_conv(format, list);
 		else
 		{
-			format++;
-			if (*format == '\0')
-				break;
-			if (*format == '%')
-			{
-				write(1, format, 1);
-				char_printed++;
-			}
-			else if (*format == 'c')
-			{
-				char c = va_arg(arg_list, int);
-
-				write(1, &c, 1);
-				char_printed++;
-			}
-			else if (*format == 's')
-			{
-				char *str = va_arg(arg_list, char*);
-				int str_len = 0;
-
-				while (str[str_len] != '\0')
-					str_len++;
-				write(1, str, str_len);
-				char_printed += str_len;
-			}
+			total += print_chr(*format);
 		}
-		format++;
+		++format;
 	}
-	va_end(arg_list);
-	return (char_printed);
+	va_end(list);
+	return (total);
 }
